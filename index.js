@@ -19,18 +19,37 @@ const writeFilePromise = (file, data) => {
   });
 };
 
-readFilePromise(`${__dirname}/dog.txt`)
-  .then((data) => {
+const getDogPic = async () => {
+  try {
+    const data = await readFilePromise(`${__dirname}/dog.txt`);
     console.log(`Breed: ${data}`);
-    return superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
-  })
-  .then((response) => {
+
+    const response = await superagent.get(
+      `https://dog.ceo/api/breed/${data}/images/random`,
+    );
     console.log(response.body.message);
-    return writeFilePromise("dog-img.txt", response.body.message);
-  })
-  .then(() => {
+
+    await writeFilePromise("dog-img.txt", response.body.message);
     console.log("Random dog🐶 image saved to file!");
-  })
-  .catch((error) => {
+  } catch (error) {
     console.log(error);
-  });
+  }
+};
+
+getDogPic();
+
+// readFilePromise(`${__dirname}/dog.txt`)
+//   .then((data) => {
+//     console.log(`Breed: ${data}`);
+//     return superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
+//   })
+//   .then((response) => {
+//     console.log(response.body.message);
+//     return writeFilePromise("dog-img.txt", response.body.message);
+//   })
+//   .then(() => {
+//     console.log("Random dog🐶 image saved to file!");
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   });
